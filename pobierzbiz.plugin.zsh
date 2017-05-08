@@ -8,7 +8,7 @@ pobierzbiz() {
 	touch $lock
 
 	local url="http://pobierz.biz"
-	res=$(curl -s -L b $lock --dump-header $lock -d "v=konto|main&f=loginUzt&c=aut&usr_login=$POBIERZBIZ_USER&usr_pass=$POBIERZBIZ_PASS" $url)
+	res=$(curl -s -L -b $lock --dump-header $lock -d "v=konto|main&f=loginUzt&c=aut&usr_login=$POBIERZBIZ_USER&usr_pass=$POBIERZBIZ_PASS" $url)
 	res=$(curl -s -L -b $lock $url/konto)
 	local uid=$(echo "$res" | grep -o -E "name='usr' value='[0-9]+'" | grep -o -E '[0-9]+')
 	[[ -n $uid ]] || { echo "Failed to log in."; return }
