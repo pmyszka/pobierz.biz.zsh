@@ -13,6 +13,10 @@ pobierzbiz() {
 	local uid=$(echo "$res" | grep -o -E "name='usr' value='[0-9]+'" | grep -o -E '[0-9]+')
 	[[ -n $uid ]] || { echo "Failed to log in."; return }
 
+	res=$(curl -s -L -b $lock "$url/?v=usr,pliki")
+	local files=$(echo "$res" | grep -o -E 'fil\[[0-9]+\]' | sed 's/.*/\&&=on/' | tr -d '\n')
+	res=$(curl -s -L -b $lock -d "c=fil&v=usr,pliki&f=usunUsera$files" $url)
+
 	while (( $# > 0 )); do
 
 		res=$(curl -s -L -b $lock -d "c=pob&v=usr,sprawdzone|usr,linki&f=sprawdzLinki&linki=$1%0A" $url)
